@@ -14,6 +14,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class App extends javax.swing.JFrame {
     
+    private boolean isCukup;
+    
     private void insertData() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         int row = jTable1.getRowCount();
@@ -447,7 +449,6 @@ public class App extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-        System.out.println(DbController.getProdukByNama("Ayam Bakar").getJumlah());
         if (nama.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nama barang belum diinput");
         } else if (harga.getText().isEmpty()) {
@@ -470,7 +471,13 @@ public class App extends javax.swing.JFrame {
         try {
             int intTotal = Integer.parseInt(valueTotal[1]);
             int intTunai = Integer.parseInt(tunai.getText());
-            kembalian.setText(String.format("Rp. %d", intTunai -  intTotal));
+            if (intTunai - intTotal >= 0) {
+                kembalian.setText(String.format("Rp. %d", intTunai -  intTotal));
+                isCukup = true;
+            } else {
+                JOptionPane.showMessageDialog(this, String.format("Uang tidak cukup!\nKurang Rp. %d", intTotal - intTunai), "Peringatan", JOptionPane.WARNING_MESSAGE);
+                isCukup = false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -478,6 +485,10 @@ public class App extends javax.swing.JFrame {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rowSelected = jTable1.getSelectedRow();
+        
+        
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
