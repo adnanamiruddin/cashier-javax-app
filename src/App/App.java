@@ -33,6 +33,7 @@ public class App extends javax.swing.JFrame {
             int confirm = JOptionPane.showConfirmDialog(this, "Anda yakin ingin menghapus baris ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 model.removeRow(rowSelected);
+                updateTotalHarga("0", "0");
             }
         } else {
             JOptionPane.showMessageDialog(this, "Tidak ada baris yang dipilih.", "Peringatan", JOptionPane.WARNING_MESSAGE);
@@ -153,7 +154,7 @@ public class App extends javax.swing.JFrame {
         jLabel3.setText("Harga");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setText("Stok");
+        jLabel4.setText("Jumlah");
 
         nama.setBackground(new java.awt.Color(51, 51, 51));
         nama.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -446,6 +447,7 @@ public class App extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
+        System.out.println(DbController.getProdukByNama("Ayam Bakar").getJumlah());
         if (nama.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nama barang belum diinput");
         } else if (harga.getText().isEmpty()) {
@@ -484,7 +486,7 @@ public class App extends javax.swing.JFrame {
         int rowSelected = jTable1.getSelectedRow();
 
         if (rowSelected >= 0) {
-            if (btnEdit.getText() == "Edit") {
+            if (btnEdit.getText().equals("Edit")) {
                 btnAdd.setEnabled(false);
                 btnDelete.setEnabled(false);
                 btnEdit.setText("Update");
@@ -502,6 +504,7 @@ public class App extends javax.swing.JFrame {
                 model.setValueAt(nama.getText(), rowSelected, 1);
                 model.setValueAt(harga.getText(), rowSelected, 2);
                 model.setValueAt(jumlah.getText(), rowSelected, 3);
+                updateTotalHarga(harga.getText(), jumlah.getText());
                 clearInput();
             }
         } else {
@@ -529,13 +532,6 @@ public class App extends javax.swing.JFrame {
         updateTotalHarga(valueHarga, valueJumlah);
     }//GEN-LAST:event_jTable1MouseClicked
 
-//    private void showTotal() {
-//        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-//        int rowSelected = jTable1.getSelectedRow();
-//        
-//        updateTotalHarga(model.getValueAt(rowSelected, 2).toString(), model.getValueAt(rowSelected, 2).toString());
-//    }
-    
     /**
      * @param args the command line arguments
      */
