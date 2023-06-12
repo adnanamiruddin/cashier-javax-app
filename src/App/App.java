@@ -21,7 +21,7 @@ public class App extends javax.swing.JFrame {
             row += 1,
             nama.getText(),
             harga.getText(),
-            stok.getText()
+            jumlah.getText()
         });
     }
     
@@ -42,24 +42,22 @@ public class App extends javax.swing.JFrame {
     private void clearInput() {
         nama.setText("");
         harga.setText("");
-        stok.setText(""); 
+        jumlah.setText(""); 
         nama.requestFocus();
     }
     
-    private void updateTotalHarga(String harga, boolean isUpdate) {
-        String[] valueTotal = total.getText().split(" ");
+    private void updateTotalHarga(String harga, String jumlah) {
+//        String[] valueTotal = total.getText().split(" ");
         try {
             int intHarga = Integer.parseInt(harga);
-            if (valueTotal.length == 1) {
-                total.setText(String.format("Rp. %d", intHarga));
-            } else {
-                int intTotal = Integer.parseInt(valueTotal[1]);
-                if (!isUpdate) {
-                    total.setText(String.format("Rp. %d", intTotal + intHarga));
-                } else {
-                    total.setText(String.format("Rp. %d", intHarga));
-                }
-            }
+            int intJumlah = Integer.parseInt(jumlah);
+            total.setText(String.format("Rp. %d", intHarga * intJumlah));
+//            if (valueTotal.length == 1) {
+//                total.setText(String.format("Rp. %d", intHarga * intStok));
+//            } else {
+//                int intTotal = Integer.parseInt(valueTotal[1]);
+//                total.setText(String.format("Rp. %d", intHarga * intStok));
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,7 +87,7 @@ public class App extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         nama = new javax.swing.JTextField();
         harga = new javax.swing.JTextField();
-        stok = new javax.swing.JTextField();
+        jumlah = new javax.swing.JTextField();
         btnAdd = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
@@ -115,7 +113,7 @@ public class App extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 0));
-        jLabel1.setText("ZN-Cashier");
+        jLabel1.setText("ZN - Cashier");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -170,12 +168,12 @@ public class App extends javax.swing.JFrame {
         harga.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         harga.setForeground(new java.awt.Color(255, 255, 255));
 
-        stok.setBackground(new java.awt.Color(51, 51, 51));
-        stok.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        stok.setForeground(new java.awt.Color(255, 255, 255));
-        stok.addActionListener(new java.awt.event.ActionListener() {
+        jumlah.setBackground(new java.awt.Color(51, 51, 51));
+        jumlah.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jumlah.setForeground(new java.awt.Color(255, 255, 255));
+        jumlah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                stokActionPerformed(evt);
+                jumlahActionPerformed(evt);
             }
         });
 
@@ -251,7 +249,6 @@ public class App extends javax.swing.JFrame {
         tunai.setBackground(new java.awt.Color(0, 0, 0));
         tunai.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         tunai.setForeground(new java.awt.Color(255, 255, 255));
-        tunai.setText("Rp. ");
 
         kembalian.setEditable(false);
         kembalian.setBackground(new java.awt.Color(0, 0, 0));
@@ -301,9 +298,9 @@ public class App extends javax.swing.JFrame {
                                     .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tunai, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(59, 59, 59)
+                        .addGap(61, 61, 61)
                         .addComponent(btnHitung)
-                        .addGap(59, 59, 59)
+                        .addGap(57, 57, 57)
                         .addComponent(btnSimpan)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -322,11 +319,11 @@ public class App extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(kembalian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnHitung, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
-                    .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnHitung, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21))
         );
 
         jPanel4.setBackground(new java.awt.Color(51, 51, 51));
@@ -336,10 +333,21 @@ public class App extends javax.swing.JFrame {
 
             },
             new String [] {
-                "No.", "Nama", "Harga", "Stok"
+                "No.", "Nama", "Harga", "Jumlah"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(5);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -375,7 +383,7 @@ public class App extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(harga, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(stok, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jumlah, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(nama, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -410,7 +418,7 @@ public class App extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(stok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
@@ -432,21 +440,20 @@ public class App extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_namaActionPerformed
 
-    private void stokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stokActionPerformed
+    private void jumlahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumlahActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_stokActionPerformed
+    }//GEN-LAST:event_jumlahActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         if (nama.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Nama barang belum diinput");
+            JOptionPane.showMessageDialog(this, "Nama barang belum diinput");
         } else if (harga.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Harga barang belum diinput");
-        } else if (stok.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Stok barang belum diinput");
+            JOptionPane.showMessageDialog(this, "Harga barang belum diinput");
+        } else if (jumlah.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Stok barang belum diinput");
         } else {
             insertData();
-            updateTotalHarga(harga.getText(), false);
             clearInput();
         }
     }//GEN-LAST:event_btnAddActionPerformed
@@ -457,6 +464,14 @@ public class App extends javax.swing.JFrame {
 
     private void btnHitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHitungActionPerformed
         // TODO add your handling code here:
+        String[] valueTotal = total.getText().split(" ");
+        try {
+            int intTotal = Integer.parseInt(valueTotal[1]);
+            int intTunai = Integer.parseInt(tunai.getText());
+            kembalian.setText(String.format("Rp. %d", intTunai -  intTotal));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnHitungActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
@@ -469,7 +484,7 @@ public class App extends javax.swing.JFrame {
         int rowSelected = jTable1.getSelectedRow();
 
         if (rowSelected >= 0) {
-                if (btnEdit.getText() == "Edit") {
+            if (btnEdit.getText() == "Edit") {
                 btnAdd.setEnabled(false);
                 btnDelete.setEnabled(false);
                 btnEdit.setText("Update");
@@ -477,7 +492,7 @@ public class App extends javax.swing.JFrame {
                 btnSimpan.setEnabled(false);
                 nama.setText(model.getValueAt(rowSelected, 1).toString());
                 harga.setText(model.getValueAt(rowSelected, 2).toString());
-                stok.setText(model.getValueAt(rowSelected, 3).toString());
+                jumlah.setText(model.getValueAt(rowSelected, 3).toString());
             } else {
                 btnAdd.setEnabled(true);
                 btnDelete.setEnabled(true);
@@ -486,8 +501,7 @@ public class App extends javax.swing.JFrame {
                 btnSimpan.setEnabled(true);
                 model.setValueAt(nama.getText(), rowSelected, 1);
                 model.setValueAt(harga.getText(), rowSelected, 2);
-                model.setValueAt(stok.getText(), rowSelected, 3);
-                updateTotalHarga(harga.getText(), true);
+                model.setValueAt(jumlah.getText(), rowSelected, 3);
                 clearInput();
             }
         } else {
@@ -505,6 +519,23 @@ public class App extends javax.swing.JFrame {
         clearInput();
     }//GEN-LAST:event_btnClearActionPerformed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rowSelected = jTable1.getSelectedRow();
+        
+        String valueHarga = model.getValueAt(rowSelected, 2).toString();
+        String valueJumlah = model.getValueAt(rowSelected, 3).toString();
+        updateTotalHarga(valueHarga, valueJumlah);
+    }//GEN-LAST:event_jTable1MouseClicked
+
+//    private void showTotal() {
+//        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+//        int rowSelected = jTable1.getSelectedRow();
+//        
+//        updateTotalHarga(model.getValueAt(rowSelected, 2).toString(), model.getValueAt(rowSelected, 2).toString());
+//    }
+    
     /**
      * @param args the command line arguments
      */
@@ -561,9 +592,9 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jumlah;
     private javax.swing.JTextField kembalian;
     private javax.swing.JTextField nama;
-    private javax.swing.JTextField stok;
     private javax.swing.JTextField total;
     private javax.swing.JTextField tunai;
     // End of variables declaration//GEN-END:variables
