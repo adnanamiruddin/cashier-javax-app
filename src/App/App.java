@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class App extends javax.swing.JFrame {
     
-    public void insertData() {
+    private void insertData() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         int row = jTable1.getRowCount();
         model.addRow(new Object[]{
@@ -25,11 +25,44 @@ public class App extends javax.swing.JFrame {
         });
     }
     
-    public void clearInput() {
+    private void deleteData() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rowSelected = jTable1.getSelectedRow();
+        
+        if (rowSelected >= 0) {
+            int confirm = JOptionPane.showConfirmDialog(this, "Anda yakin ingin menghapus baris ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                model.removeRow(rowSelected);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Tidak ada baris yang dipilih.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    private void clearInput() {
         nama.setText("");
         harga.setText("");
         stok.setText(""); 
         nama.requestFocus();
+    }
+    
+    private void updateTotalHarga(String harga, boolean isUpdate) {
+        String[] valueTotal = total.getText().split(" ");
+        try {
+            int intHarga = Integer.parseInt(harga);
+            if (valueTotal.length == 1) {
+                total.setText(String.format("Rp. %d", intHarga));
+            } else {
+                int intTotal = Integer.parseInt(valueTotal[1]);
+                if (!isUpdate) {
+                    total.setText(String.format("Rp. %d", intTotal + intHarga));
+                } else {
+                    total.setText(String.format("Rp. %d", intHarga));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -407,13 +440,13 @@ public class App extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (nama.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nama barang belum diinput");
-            System.out.println(DbController.getProdukByNama("Ayam Bakar").getNama());
         } else if (harga.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Harga barang belum diinput");
         } else if (stok.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Stok barang belum diinput");
         } else {
             insertData();
+            updateTotalHarga(harga.getText(), false);
             clearInput();
         }
     }//GEN-LAST:event_btnAddActionPerformed
@@ -435,53 +468,41 @@ public class App extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         int rowSelected = jTable1.getSelectedRow();
 
-        if (btnEdit.getText() == "Edit") {
-            btnAdd.setEnabled(false);
-            btnDelete.setEnabled(false);
-            btnEdit.setText("Update");
-            btnHitung.setEnabled(false);
-            btnSimpan.setEnabled(false);
-            nama.setText(model.getValueAt(rowSelected, 1).toString());
-            harga.setText(model.getValueAt(rowSelected, 2).toString());
-            stok.setText(model.getValueAt(rowSelected, 3).toString());
+        if (rowSelected >= 0) {
+                if (btnEdit.getText() == "Edit") {
+                btnAdd.setEnabled(false);
+                btnDelete.setEnabled(false);
+                btnEdit.setText("Update");
+                btnHitung.setEnabled(false);
+                btnSimpan.setEnabled(false);
+                nama.setText(model.getValueAt(rowSelected, 1).toString());
+                harga.setText(model.getValueAt(rowSelected, 2).toString());
+                stok.setText(model.getValueAt(rowSelected, 3).toString());
+            } else {
+                btnAdd.setEnabled(true);
+                btnDelete.setEnabled(true);
+                btnEdit.setText("Edit");
+                btnHitung.setEnabled(true);
+                btnSimpan.setEnabled(true);
+                model.setValueAt(nama.getText(), rowSelected, 1);
+                model.setValueAt(harga.getText(), rowSelected, 2);
+                model.setValueAt(stok.getText(), rowSelected, 3);
+                updateTotalHarga(harga.getText(), true);
+                clearInput();
+            }
         } else {
-            btnAdd.setEnabled(true);
-            btnDelete.setEnabled(true);
-            btnEdit.setText("Edit");
-            btnHitung.setEnabled(true);
-            btnSimpan.setEnabled(true);
-            model.setValueAt(nama.getText(), rowSelected, 1);
-            nama.setText("");
-            model.setValueAt(harga.getText(), rowSelected, 2);
-            harga.setText("");
-            model.setValueAt(stok.getText(), rowSelected, 3);
-            stok.setText("");
-            nama.requestFocus();
+            JOptionPane.showMessageDialog(this, "Tidak ada baris yang dipilih.", "Peringatan", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int rowSelected = jTable1.getSelectedRow();
-        
-        if (rowSelected >= 0) {
-            int confirm = JOptionPane.showConfirmDialog(this, "Anda yakin ingin menghapus baris ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-
-            if (confirm == JOptionPane.YES_OPTION) {
-                model.removeRow(rowSelected);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Tidak ada baris yang dipilih.", "Peringatan", JOptionPane.WARNING_MESSAGE);
-        }
+        deleteData();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
-        nama.setText("");
-        harga.setText("");
-        stok.setText("");
-        nama.requestFocus();
+        clearInput();
     }//GEN-LAST:event_btnClearActionPerformed
 
     /**
