@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class App extends javax.swing.JFrame {
     
-    private boolean isCukup;
+    private boolean isCukup = false;
     
     private void insertData() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -27,9 +27,8 @@ public class App extends javax.swing.JFrame {
         });
     }
     
-    private void deleteData() {
+    private void deleteData(int rowSelected) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int rowSelected = jTable1.getSelectedRow();
         
         if (rowSelected >= 0) {
             int confirm = JOptionPane.showConfirmDialog(this, "Anda yakin ingin menghapus baris ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
@@ -52,9 +51,9 @@ public class App extends javax.swing.JFrame {
     private void updateTotalHarga(String harga, String jumlah) {
 //        String[] valueTotal = total.getText().split(" ");
         try {
-            int intHarga = Integer.parseInt(harga);
+            long longHarga = Long.parseLong(harga);
             int intJumlah = Integer.parseInt(jumlah);
-            total.setText(String.format("Rp. %d", intHarga * intJumlah));
+            total.setText(String.format("Rp. %d", longHarga * intJumlah));
 //            if (valueTotal.length == 1) {
 //                total.setText(String.format("Rp. %d", intHarga * intStok));
 //            } else {
@@ -346,6 +345,7 @@ public class App extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
             jTable1.getColumnModel().getColumn(0).setPreferredWidth(5);
             jTable1.getColumnModel().getColumn(1).setResizable(false);
             jTable1.getColumnModel().getColumn(2).setResizable(false);
@@ -450,14 +450,27 @@ public class App extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         if (nama.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nama barang belum diinput");
+            JOptionPane.showMessageDialog(this, "Nama barang belum diinput.", "Peringatan", JOptionPane.WARNING_MESSAGE);
         } else if (harga.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Harga barang belum diinput");
+            JOptionPane.showMessageDialog(this, "Harga barang belum diinput.", "Peringatan", JOptionPane.WARNING_MESSAGE);
         } else if (jumlah.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Stok barang belum diinput");
+            JOptionPane.showMessageDialog(this, "Stok barang belum diinput.", "Peringatan", JOptionPane.WARNING_MESSAGE);
         } else {
-            insertData();
-            clearInput();
+            // Validasi harga
+            try {
+                long hargaBarang = Long.parseLong(harga.getText());
+                // Harga adalah angka, lanjutkan dengan validasi jumlah
+                try {
+                    int jumlahBarang = Integer.parseInt(jumlah.getText());
+                    // Jumlah adalah angka, lanjutkan dengan insertData()
+                    insertData();
+                    clearInput();
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Jumlah barang harus berupa angka.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Harga barang harus berupa angka.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -488,7 +501,19 @@ public class App extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         int rowSelected = jTable1.getSelectedRow();
         
+        String namaBarang = model.getValueAt(rowSelected, 1).toString();
+        String hargaBarang = model.getValueAt(rowSelected, 2).toString();
+        long longHargaBarang = Long.parseLong(hargaBarang);
+        String jumlahBarang = model.getValueAt(rowSelected, 3).toString();
+        int intJumlahBarang = Integer.parseInt(jumlahBarang);
         
+        if (isCukup) {
+            DbController.insertData(namaBarang, longHargaBarang, intJumlahBarang);
+            JOptionPane.showMessageDialog(this, "Berhasil menambahkan ke Database", "Information", JOptionPane.INFORMATION_MESSAGE);
+            model.removeRow(rowSelected);
+        } else {
+            JOptionPane.showMessageDialog(this, "Uang tidak cukup!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -525,7 +550,8 @@ public class App extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        deleteData();
+        int rowSelected = jTable1.getSelectedRow();
+        deleteData(rowSelected);
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
