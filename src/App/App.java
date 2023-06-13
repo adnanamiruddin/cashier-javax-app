@@ -487,9 +487,11 @@ public class App extends javax.swing.JFrame {
             if (intTunai - intTotal >= 0) {
                 kembalian.setText(String.format("Rp. %d", intTunai -  intTotal));
                 isCukup = true;
+                btnSimpan.setEnabled(true);
             } else {
                 JOptionPane.showMessageDialog(this, String.format("Uang tidak cukup!\nKurang Rp. %d", intTotal - intTunai), "Peringatan", JOptionPane.WARNING_MESSAGE);
                 isCukup = false;
+                btnSimpan.setEnabled(false);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -509,8 +511,12 @@ public class App extends javax.swing.JFrame {
         
         if (isCukup) {
             DbController.insertData(namaBarang, longHargaBarang, intJumlahBarang);
-            JOptionPane.showMessageDialog(this, "Berhasil menambahkan ke Database", "Information", JOptionPane.INFORMATION_MESSAGE);
+            tunai.setText(kembalian.getText());
+            updateTotalHarga("0", "0");
             model.removeRow(rowSelected);
+            kembalian.setText("Rp. 0");
+            JOptionPane.showMessageDialog(this, "Berhasil menambahkan ke Database", "Information", JOptionPane.INFORMATION_MESSAGE);
+            btnSimpan.setEnabled(false);
         } else {
             JOptionPane.showMessageDialog(this, "Uang tidak cukup!", "Peringatan", JOptionPane.WARNING_MESSAGE);
         }
@@ -527,7 +533,6 @@ public class App extends javax.swing.JFrame {
                 btnDelete.setEnabled(false);
                 btnEdit.setText("Update");
                 btnHitung.setEnabled(false);
-                btnSimpan.setEnabled(false);
                 nama.setText(model.getValueAt(rowSelected, 1).toString());
                 harga.setText(model.getValueAt(rowSelected, 2).toString());
                 jumlah.setText(model.getValueAt(rowSelected, 3).toString());
@@ -536,7 +541,6 @@ public class App extends javax.swing.JFrame {
                 btnDelete.setEnabled(true);
                 btnEdit.setText("Edit");
                 btnHitung.setEnabled(true);
-                btnSimpan.setEnabled(true);
                 model.setValueAt(nama.getText(), rowSelected, 1);
                 model.setValueAt(harga.getText(), rowSelected, 2);
                 model.setValueAt(jumlah.getText(), rowSelected, 3);
@@ -599,7 +603,10 @@ public class App extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new App().setVisible(true);
+//                new App().setVisible(true);
+                App app = new App();
+                app.setVisible(true);
+                app.btnSimpan.setEnabled(false);
             }
         });
     }
