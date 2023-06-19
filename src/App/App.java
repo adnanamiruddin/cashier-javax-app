@@ -37,7 +37,7 @@ public class App extends javax.swing.JFrame {
                 updateTotalHarga("0", "0");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Tidak ada baris yang dipilih.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Tidak ada baris yang dipilih.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
     
@@ -463,11 +463,11 @@ public class App extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         if (nama.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nama barang belum diinput.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Nama barang belum diinput.", "Warning", JOptionPane.WARNING_MESSAGE);
         } else if (harga.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Harga barang belum diinput.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Harga barang belum diinput.", "Warning", JOptionPane.WARNING_MESSAGE);
         } else if (jumlah.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Stok barang belum diinput.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Stok barang belum diinput.", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
             // Validasi harga
             try {
@@ -479,10 +479,10 @@ public class App extends javax.swing.JFrame {
                     insertData();
                     clearInput();
                 } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Jumlah barang harus berupa angka.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Jumlah barang harus berupa angka.", "Warning", JOptionPane.WARNING_MESSAGE);
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Harga barang harus berupa angka.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Harga barang harus berupa angka.", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnAddActionPerformed
@@ -531,7 +531,7 @@ public class App extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Berhasil menambahkan ke Database", "Information", JOptionPane.INFORMATION_MESSAGE);
             btnSimpan.setEnabled(false);
         } else {
-            JOptionPane.showMessageDialog(this, "Uang tidak cukup!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Uang tidak cukup!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
@@ -561,7 +561,7 @@ public class App extends javax.swing.JFrame {
                 clearInput();
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Tidak ada baris yang dipilih.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Tidak ada baris yang dipilih.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
